@@ -1,0 +1,16 @@
+MODULE main
+VAR
+  bit0 : counter_call(1);
+  bit1 : counter_call(bit0.carry_out);
+  bit2 : counter_call(bit1.carry_out);
+LTLSPEC
+  G F bool(bit2.carry_out)
+
+MODULE counter_call(carry_in)
+VAR
+  value : boolean;
+ASSIGN
+  init(value) := FALSE;
+  next(value) := bool((toint(value) + carry_in) mod 2);
+DEFINE
+  carry_out := toint(value & bool(carry_in));
